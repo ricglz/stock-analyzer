@@ -2,7 +2,6 @@
 
 import datetime
 import random
-from urllib.request import urlopen
 
 import matplotlib
 import matplotlib.dates as mdates
@@ -35,14 +34,14 @@ class Stock:
         https://readthedocs.org/projects/pandas-datareader/downloads/pdf/latest/
         """
 
-        stockData = web.DataReader(ticker, 'yahoo', start, end)
+        stock_data = web.DataReader(ticker, 'yahoo', start, end)
 
-        self.dates = [mdates.date2num(d) for d in stockData.index]
-        self.closes = stockData['Close']
-        self.highs = stockData['High']
-        self.lows = stockData['Low']
-        self.opens = stockData['Open']
-        self.volumes = stockData['Volume']
+        self.dates = [mdates.date2num(d) for d in stock_data.index]
+        self.closes = stock_data['Close']
+        self.highs = stock_data['High']
+        self.lows = stock_data['Low']
+        self.opens = stock_data['Open']
+        self.volumes = stock_data['Volume']
 
         self.rsi = self.RSI(self.closes)
 
@@ -248,7 +247,6 @@ class Stock:
                                 right=.94, top=.95, wspace=.20, hspace=0)
 
             plt.show()
-            fig.savefig('example.png', facecolor=fig.get_facecolor())
 
         except Exception as e:
             print('Error graphing data: ', str(e))

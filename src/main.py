@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import datetime
 import random
@@ -6,13 +7,7 @@ import time
 from urllib.request import urlopen
 
 import matplotlib
-import matplotlib.dates as mdates
-import matplotlib.pyplot as plt
-import matplotlib.ticker as mticker
-import numpy as np
 import pandas_datareader.data as web
-import pylab
-from mplfinance.original_flavor import candlestick_ohlc
 from pandas.core.common import flatten
 from tabulate import tabulate
 
@@ -20,11 +15,7 @@ from stock import Stock
 
 matplotlib.rcParams.update({'font.size': 9})
 
-stocks = []
-
-# If stocks array is empty, pull stock list from stocks.txt file
-stocks = stocks if len(stocks) > 0 else [
-    line.rstrip() for line in open("stocks.txt", "r")]
+stocks = [line.rstrip() for line in open("stocks.txt", "r")]
 
 # Time frame you want to pull data from
 start = datetime.datetime.now()-datetime.timedelta(days=365)
@@ -39,6 +30,11 @@ if __name__ == "__main__":
 
     for ticker in stocks:
 
+        try:
+            stock_data = web.DataReader('{}.MX'.format(ticker), 'yahoo', start, end)
+        except Exception as e:
+            data = [ticker.upper(), "is not in MEX market"]
+            continue
         try:
             data = []
 
@@ -65,7 +61,7 @@ if __name__ == "__main__":
             else:
                 data.append(currentRsi)
 
-            chartLink = "https://finance.yahoo.com/quote/" + ticker + "/chart?p=" + ticker
+            chartLink = "https://finance.yahoo.com/quote/{}/chart?p={}".format(ticker, ticker)
 
             data.append(chartLink)
 
