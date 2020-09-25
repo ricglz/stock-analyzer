@@ -32,8 +32,7 @@ if __name__ == "__main__":
 
         try:
             stock_data = web.DataReader('{}.MX'.format(ticker), 'yahoo', start, end)
-        except Exception as e:
-            data = [ticker.upper(), "is not in MEX market"]
+        except Exception as exception:
             continue
         try:
             data = []
