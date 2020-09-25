@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 from stock import Stock
 
 # Time frame you want to pull data from
-start = datetime.now()-timedelta(days=365)
 end = datetime.now()
+start = end - timedelta(days=365)
 
 all_data = []
 averages = [20, 200]
@@ -63,10 +63,13 @@ def run_ticker_thread(ticker):
 
         if is_oversold:
             oversold_data.append(data)
+            return None
         elif is_undersold:
             undersold_data.append(data)
+            return stock
         else:
             all_data.append(data)
+            return None
 
     except Exception as e:
         print('Error: ', str(e), ticker)
