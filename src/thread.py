@@ -10,8 +10,10 @@ from stock import Stock
 start = datetime.now()-timedelta(days=365)
 end = datetime.now()
 
-allData = []
+all_data = []
 averages = [20, 200]
+oversold_data = []
+undersold_data = []
 
 class TickerThread(Thread):
     """Thread for checking the ticker data in parallel"""
@@ -45,10 +47,12 @@ def run_ticker_thread(ticker):
             data.append(computed_sma[-1])
 
         current_rsi = float("{:.2f}".format(stock.rsi[-1]))
+        is_oversold = current_rsi > 70
+        is_undersold = current_rsi < 30
 
-        if current_rsi > 70:
+        if is_oversold:
             data.append(str(current_rsi) + " 🔥")
-        elif current_rsi < 30:
+        elif is_undersold:
             data.append(str(current_rsi) + " 🧊")
         else:
             data.append(current_rsi)
@@ -57,7 +61,12 @@ def run_ticker_thread(ticker):
 
         data.append(chart_link)
 
-        allData.append(data)
+        if is_oversold:
+            oversold_data.append(data)
+        elif is_undersold:
+            undersold_data.append(data)
+        else:
+            all_data.append(data)
 
     except Exception as e:
         print('Error: ', str(e), ticker)
