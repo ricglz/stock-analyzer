@@ -1,8 +1,7 @@
 aapl
-mrns
-wll1
 abbv
 acn
+apo
 armk
 bac
 boss
@@ -12,10 +11,14 @@ ccl
 chng
 clr
 cost
+cs
+csco
 cx
+eat
 edc
 edz
 eem
+endp
 epu
 f
 feye
@@ -28,6 +31,8 @@ gpn
 gps
 gs
 ibta
+idfx.l
+ilmn
 ino
 jef
 jnj
@@ -41,9 +46,11 @@ ma
 mat
 mcd
 mdla
+mfgp
 mo
 mos
 mrna
+mrns
 msft
 mtg
 nclh
@@ -75,6 +82,7 @@ ual
 uso
 v
 vwo
+wll
 wmt
 wrk
 x

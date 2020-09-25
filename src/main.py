@@ -9,10 +9,12 @@ from tabulate import tabulate
 import matplotlib
 
 def print_data(name, data):
+    headers = flatten([
+        'Stock', 'Price', [str(x) + ' MA' for x in averages], 'RSI', 'chart'
+    ])
     print(name)
     print()
-    print(tabulate(data, headers=flatten([
-        'Stock', 'Price', [str(x) + " MA" for x in averages], "RSI", "chart"])))
+    print(tabulate(data, headers=headers))
     print()
 
 
