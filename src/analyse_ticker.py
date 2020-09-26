@@ -17,8 +17,8 @@ start = end - timedelta(days=365)
 
 all_data = []
 averages = [20, 200]
+overbought_data = []
 oversold_data = []
-undersold_data = []
 
 
 def print_data(name, data):
@@ -30,13 +30,10 @@ def print_data(name, data):
     print(tabulate(data, headers=headers))
     print()
 
-
 def print_datas():
     print_data('All data', all_data)
-    print_data('Oversold stocks', oversold_data)
-    print_data('Undersold stocks', undersold_data)
-
-
+    print_data('overbought stocks', overbought_data)
+    print_data('oversold stocks', oversold_data)
 
 def rsi_analysis(stock, data):
     """
@@ -44,22 +41,21 @@ def rsi_analysis(stock, data):
     results in the analysis
     """
     current_rsi = float("{:.2f}".format(stock.rsi[-1]))
-    is_oversold = current_rsi > 70
-    is_undersold = current_rsi < 30
+    is_overbought = current_rsi > 70
+    is_oversold = current_rsi < 30
     current_rsi = str(current_rsi)
 
-    if is_oversold:
+    if is_overbought:
         current_rsi += " 🔥"
-    elif is_undersold:
+    elif is_oversold:
         current_rsi += " 🧊"
     data.append(current_rsi)
-    return is_oversold, is_undersold
-
+    return is_overbought, is_oversold
 
 def analyse_ticker(ticker):
     """
     Performs reader for the corresponding ticker and checks
-    if it's an actual rsi value for undersold or oversold
+    if it's an actual rsi value for oversold or overbought
     """
     try:
         data = []
@@ -76,17 +72,17 @@ def analyse_ticker(ticker):
             computed_sma = stock.sma(period=average)
             data.append(computed_sma[-1])
 
-        is_oversold, is_undersold = rsi_analysis(stock, data)
+        is_overbought, is_oversold = rsi_analysis(stock, data)
 
         chart_link = "https://finance.yahoo.com/quote/{0}/chart?p={0}".format(ticker)
 
         data.append(chart_link)
 
-        if is_undersold:
-            undersold_data.append(data)
-            return stock
         if is_oversold:
             oversold_data.append(data)
+            return stock
+        if is_overbought:
+            overbought_data.append(data)
         else:
             all_data.append(data)
         return None
