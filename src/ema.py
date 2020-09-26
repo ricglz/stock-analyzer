@@ -4,7 +4,6 @@
 """
 Module with only the function to calculate the ema
 """
-from numpy import convolve, exp, linspace
 
 def calculate_ema(values, period=50):
     """
@@ -14,8 +13,4 @@ def calculate_ema(values, period=50):
     values
     """
 
-    weights = exp(linspace(-1., 0., period))
-    weights /= weights.sum()
-    ema = convolve(values, weights, mode='full')[:len(values)]
-    ema[:period] = ema[period]
-    return ema
+    return values.ewm(span=period).mean()

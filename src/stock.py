@@ -7,6 +7,7 @@ from datetime import datetime
 
 import matplotlib.dates as mdates
 import pandas_datareader.data as web
+from pandas import DataFrame
 
 from ema import calculate_ema
 from macd import calculate_macd
@@ -32,10 +33,11 @@ class Stock:
         self.ticker = ticker
         self.dates = [mdates.date2num(d) for d in stock_data.index]
         self.closes = stock_data['Close']
+        self.closes_dt = DataFrame(self.closes.array)
 
-        self.macd = calculate_macd(self.closes)
+        self.macd = calculate_macd(self.closes_dt).values.flatten().tolist()
         self.rsi = calculate_rsi(self.closes)
-        self.signal_line = calculate_ema(self.closes, 9)
+        self.signal_line = calculate_ema(self.closes_dt, 9).values.flatten().tolist()
 
     def sma(self, period):
         """
