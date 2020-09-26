@@ -6,7 +6,7 @@ Module with only the function to calculate the rsi
 """
 from numpy import diff, zeros_like
 
-def calculate_rsi(prices, periods=4):
+def calculate_rsi(prices, periods=14):
     """
     Based on the prices of a stock and an amount of periods,
     return the rsi of the stock

@@ -42,3 +42,6 @@ class Stock:
         Calculates the sma of the closes based on a period
         """
         return calculate_sma(self.closes, period)
+
+    def is_bullish():
+        return macd > signal_line

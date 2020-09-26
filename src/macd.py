@@ -4,15 +4,14 @@
 """
 Module with only the function to calculate the macd
 """
-from numpy import convolve, exp, linspace
 from ema import calculate_ema
 
 def calculate_macd(closes, slow=26, fast=12):
     """
-    Compute the MACD (Moving Average Convergence/Divergence) using a fast and slow exponential moving avg'
-    return value is emaslow, emafast, macd which are len(x) arrays
+    Compute the MACD (Moving Average Convergence/Divergence) using
+    a fast and slow exponential moving avg
     """
 
     emaslow = calculate_ema(closes, slow)
     emafast = calculate_ema(closes, fast)
-    return emaslow, emafast, emafast - emaslow
+    return emafast - emaslow
