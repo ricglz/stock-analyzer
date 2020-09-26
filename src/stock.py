@@ -43,5 +43,5 @@ class Stock:
         """
         return calculate_sma(self.closes, period)
 
-    def is_bullish():
-        return macd > signal_line
+    def is_currently_bullish(self):
+        return self.macd[-1] > self.signal_line[-1]

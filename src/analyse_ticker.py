@@ -23,7 +23,8 @@ oversold_data = []
 
 def print_data(name, data):
     headers = flatten([
-        'Stock', 'Price', [str(x) + ' MA' for x in averages], 'RSI', 'chart'
+        'Stock', 'Price', [str(x) + ' MA' for x in averages],
+        'RSI',  'MACD', 'chart'
     ])
     print(name)
     print()
@@ -32,10 +33,10 @@ def print_data(name, data):
 
 def print_datas():
     print_data('All data', all_data)
-    print_data('overbought stocks', overbought_data)
-    print_data('oversold stocks', oversold_data)
+    print_data('Overbought stocks', overbought_data)
+    print_data('Oversold stocks', oversold_data)
 
-def rsi_analysis(stock, data):
+def analyse_rsi(stock, data):
     """
     Performs analysis over the rsi of the stock and add the
     results in the analysis
@@ -51,6 +52,18 @@ def rsi_analysis(stock, data):
         current_rsi += " 🧊"
     data.append(current_rsi)
     return is_overbought, is_oversold
+
+def analyse_macd(stock, data):
+    """
+    Performs analysis over the macd of the stock and add the
+    results in the analysis
+    """
+    current_macd = "{:.2f}".format(stock.macd[-1])
+    if stock.is_currently_bullish():
+        current_macd += " 🔥"
+    else:
+        current_macd += " 🧊"
+    data.append(current_macd)
 
 def analyse_ticker(ticker):
     """
@@ -72,7 +85,8 @@ def analyse_ticker(ticker):
             computed_sma = stock.sma(period=average)
             data.append(computed_sma[-1])
 
-        is_overbought, is_oversold = rsi_analysis(stock, data)
+        is_overbought, is_oversold = analyse_rsi(stock, data)
+        analyse_macd(stock, data)
 
         chart_link = "https://finance.yahoo.com/quote/{0}/chart?p={0}".format(ticker)
 
