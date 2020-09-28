@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
 Module with only the function to calculate the rsi
 """
+
 from numpy import array, diff, zeros_like
 from pandas import DataFrame
+
+from utils import calculate_predictions
 
 def calculate_rsi(prices, periods=14):
     """
@@ -38,12 +40,6 @@ def calculate_rsi(prices, periods=14):
 
     return DataFrame(rsi, columns=['rsi'])
 
-def divide(numerator, denominator):
-    """
-    Divide function to avoid errors by dividing over zero
-    """
-    return 0 if denominator == 0 else numerator / denominator
-
 def calculate_bought_status(rsi):
     """
     Calculate if based on the rsi, the stock is overbought or
@@ -62,9 +58,6 @@ def calculate_rsi_predictions(prices, rsi):
     false_positive = 0
     true_negative = 0
     false_negative = 0
-    sensitivity = 0
-    specificity = 0
-    accuracy = 0
     while days_observed < len(prices)-5:
         change = array(prices[days_observed + 1: days_observed + 6]).mean()
         is_overbought, is_oversold = calculate_bought_status(rsi[days_observed])
@@ -79,14 +72,4 @@ def calculate_rsi_predictions(prices, rsi):
             else:
                 false_positive += 1
         days_observed += 1
-    sensitivity_denominator = true_positive + false_negative
-    specificity_denominator = true_negative + false_positive
-    sensitivity = divide(true_positive, sensitivity_denominator)
-    specificity = divide(true_negative, specificity_denominator)
-    accuracy = divide(
-        true_positive + true_negative,
-        sensitivity_denominator + specificity_denominator
-    )
-    tpr = sensitivity  # Calculate the true positive rate
-    fpr = 1 - specificity  # Calculate the false positive rate
-    return accuracy, tpr, fpr
+    return calculate_predictions(true_positive, false_positive, true_negative, false_negative)
