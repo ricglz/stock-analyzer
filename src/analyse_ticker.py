@@ -10,10 +10,11 @@ from pandas.core.common import flatten
 from tabulate import tabulate
 
 from stock import Stock
+from rsi import calculate_bought_status
 
 # Time frame you want to pull data from
 end = date.today()
-start = end - timedelta(years=1)
+start = end - timedelta(days=365)
 
 all_data = []
 averages = [20, 200]
@@ -26,7 +27,7 @@ def print_data(name, data):
     Print in a certain format the data passed as an argument,
     alongside the associated name of the data
     """
-    headers = flatten(['Stock', 'Price', 'RSI', 'MACD', 'chart'])
+    headers = flatten(['Stock', 'Price', 'RSI', 'Accuracy (RSI)', 'MACD'])
     print(name)
     print()
     print(tabulate(data, headers=headers))
@@ -46,16 +47,22 @@ def analyse_rsi(stock, data):
     Performs analysis over the rsi of the stock and add the
     results in the analysis
     """
-    current_rsi = float("{:.2f}".format(stock.rsi[-1]))
-    is_overbought = current_rsi > 70
-    is_oversold = current_rsi < 30
-    current_rsi = str(current_rsi)
+    current_rsi = "{:.2f}".format(stock.rsi[-1])
+    is_overbought, is_oversold = calculate_bought_status(float(current_rsi))
 
     if is_overbought:
         current_rsi += " 🔥"
     elif is_oversold:
         current_rsi += " 🧊"
     data.append(current_rsi)
+
+    accuracy = "{:.0%}".format(stock.rsi_accuracy)
+    if stock.rsi_accuracy >= 0.50:
+        accuracy += " 🔥"
+    else:
+        accuracy += " 🧊"
+    data.append(accuracy)
+
     return is_overbought, is_oversold
 
 def analyse_macd(stock, data):
@@ -68,6 +75,7 @@ def analyse_macd(stock, data):
         current_macd += " 🔥"
     else:
         current_macd += " 🧊"
+
     data.append(current_macd)
 
 def analyse_ticker(ticker):
@@ -88,10 +96,6 @@ def analyse_ticker(ticker):
 
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
-
-        chart_link = "https://finance.yahoo.com/quote/{0}/chart?p={0}".format(ticker)
-
-        data.append(chart_link)
 
         if is_oversold:
             oversold_data.append(data)

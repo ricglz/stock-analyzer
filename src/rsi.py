@@ -4,7 +4,7 @@
 """
 Module with only the function to calculate the rsi
 """
-from numpy import diff, zeros_like
+from numpy import array, diff, zeros_like
 
 def calculate_rsi(prices, periods=14):
     """
@@ -36,3 +36,56 @@ def calculate_rsi(prices, periods=14):
         rsi[i] = 100. - 100./(1.+relative_strength)
 
     return rsi
+
+def divide(numerator, denominator):
+    """
+    Divide function to avoid errors by dividing over zero
+    """
+    return 0 if denominator == 0 else numerator / denominator
+
+def calculate_bought_status(rsi):
+    """
+    Calculate if based on the rsi, the stock is overbought or
+    oversold
+    """
+    is_overbought = rsi >= 70
+    is_oversold = rsi <= 30
+    return is_overbought, is_oversold
+
+def calculate_rsi_predictions(prices, rsi):
+    """
+    Calculate prediction metrics of the rsi
+    """
+    days_observed = 14
+    true_positive = 0
+    false_positive = 0
+    true_negative = 0
+    false_negative = 0
+    sensitivity = 0
+    specificity = 0
+    accuracy = 0
+    while days_observed < len(prices)-5:
+        change = array(prices[days_observed + 1: days_observed + 6]).mean()
+        is_overbought, is_oversold = calculate_bought_status(rsi[days_observed])
+        if is_oversold:
+            if change > prices[days_observed]:
+                true_positive += 1
+            else:
+                false_negative += 1
+        elif is_overbought:
+            if change <= prices[days_observed]:
+                true_negative += 1
+            else:
+                false_positive += 1
+        days_observed += 1
+    sensitivity_denominator = true_positive + false_negative
+    specificity_denominator = true_negative + false_positive
+    sensitivity = divide(true_positive, sensitivity_denominator)
+    specificity = divide(true_negative, specificity_denominator)
+    accuracy = divide(
+        true_positive + true_negative,
+        sensitivity_denominator + specificity_denominator
+    )
+    tpr = sensitivity  # Calculate the true positive rate
+    fpr = 1 - specificity  # Calculate the false positive rate
+    return accuracy, tpr, fpr

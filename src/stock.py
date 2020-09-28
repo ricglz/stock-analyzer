@@ -6,13 +6,12 @@ Module in charge of managing the stock and its analystic values
 from datetime import date, timedelta
 from os import stat
 
-import matplotlib.dates as mdates
 from pandas_datareader.data import get_data_yahoo
 from pandas import DataFrame, read_csv
 
 from ema import calculate_ema
 from macd import calculate_macd
-from rsi import calculate_rsi
+from rsi import calculate_rsi, calculate_rsi_predictions
 from sma import calculate_sma
 
 def get_stock_data(ticker, start, end):
@@ -32,11 +31,14 @@ def get_stock_data(ticker, start, end):
     return stock_data
 
 class Stock:
+    """
+    Class to manage the stock import values for decision making
+    """
     closes = None
     macd = None
     rsi = None
+    rsi_accuracy = None
     signal_line = None
-
 
     def __init__(self, ticker, start, end):
         """
@@ -51,6 +53,7 @@ class Stock:
 
         self.macd = calculate_macd(self.closes_dt).values.flatten().tolist()
         self.rsi = calculate_rsi(self.closes)
+        self.rsi_accuracy = calculate_rsi_predictions(self.closes, self.rsi)[0]
         self.signal_line = calculate_ema(self.closes_dt, 9).values.flatten().tolist()
 
     def sma(self, period):
@@ -60,4 +63,8 @@ class Stock:
         return calculate_sma(self.closes, period)
 
     def is_currently_bullish(self):
+        """
+        Calculates if the trend is bullish or not based on the
+        macd value and the signal line
+        """
         return self.macd[-1] > self.signal_line[-1]
