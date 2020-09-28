@@ -26,10 +26,7 @@ def print_data(name, data):
     Print in a certain format the data passed as an argument,
     alongside the associated name of the data
     """
-    headers = flatten([
-        'Stock', 'Price', [str(x) + ' MA' for x in averages],
-        'RSI', 'MACD', 'chart'
-    ])
+    headers = flatten(['Stock', 'Price', 'RSI', 'MACD', 'chart'])
     print(name)
     print()
     print(tabulate(data, headers=headers))
@@ -88,10 +85,6 @@ def analyse_ticker(ticker):
         data.append(ticker.upper())
 
         data.append(stock.closes[-1])
-
-        for average in averages:
-            computed_sma = stock.sma(period=average)
-            data.append(computed_sma[-1])
 
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
