@@ -27,7 +27,7 @@ def print_data(name, data):
     Print in a certain format the data passed as an argument,
     alongside the associated name of the data
     """
-    headers = flatten(['Stock', 'Price', 'RSI', 'Accuracy (RSI)', 'MACD'])
+    headers = flatten(['Stock', 'Price', 'RSI', 'Accuracy', 'MACD'])
     print(name)
     print()
     print(tabulate(data, headers=headers))
@@ -86,14 +86,9 @@ def analyse_ticker(ticker):
     try:
         data = []
 
-        print('Analysing data for {}'.format(ticker))
-
         stock = Stock(ticker, start, end)
-
         data.append(ticker.upper())
-
         data.append(stock.closes[-1])
-
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
 

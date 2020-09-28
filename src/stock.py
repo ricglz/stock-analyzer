@@ -9,6 +9,7 @@ from os import stat
 from pandas_datareader.data import get_data_yahoo
 from pandas import DataFrame, read_csv
 
+from csv_manager import get_data
 from ema import calculate_ema
 from macd import calculate_macd
 from rsi import calculate_rsi, calculate_rsi_predictions
@@ -45,14 +46,16 @@ class Stock:
         Different sources for pulling data can be found here:
         https://readthedocs.org/projects/pandas-datareader/downloads/pdf/latest/
         """
-        stock_data = get_stock_data(ticker, start, end)
+        stock_file = 'csvs/history/{}.csv'.format(ticker)
+        stock_data = get_data(stock_file, get_data_yahoo, ticker, start, end)
 
         self.ticker = ticker
         self.closes = stock_data['Close'].tolist()
         self.closes_dt = DataFrame(self.closes)
 
         self.macd = calculate_macd(self.closes_dt).values.flatten().tolist()
-        self.rsi = calculate_rsi(self.closes)
+        rsi_file = 'csvs/rsi/{}.csv'.format(ticker)
+        self.rsi = get_data(rsi_file, calculate_rsi, self.closes)['rsi'].tolist()
         self.rsi_accuracy = calculate_rsi_predictions(self.closes, self.rsi)[0]
         self.signal_line = calculate_ema(self.closes_dt, 9).values.flatten().tolist()
 

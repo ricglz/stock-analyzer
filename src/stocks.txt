@@ -1,4 +1,5 @@
 aapl
+vym
 abbv
 acn
 afl
@@ -83,6 +84,7 @@ msft
 mt
 mtg
 nclh
+nio
 nkla
 nvax
 o
@@ -93,6 +95,7 @@ pbr
 pep
 pfe
 pg
+pll
 pm
 ppsi
 pton

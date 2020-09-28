@@ -5,6 +5,7 @@
 Module with only the function to calculate the rsi
 """
 from numpy import array, diff, zeros_like
+from pandas import DataFrame
 
 def calculate_rsi(prices, periods=14):
     """
@@ -35,7 +36,7 @@ def calculate_rsi(prices, periods=14):
         relative_strength = up_prices/down_prices
         rsi[i] = 100. - 100./(1.+relative_strength)
 
-    return rsi
+    return DataFrame(rsi, columns=['rsi'])
 
 def divide(numerator, denominator):
     """
@@ -48,8 +49,8 @@ def calculate_bought_status(rsi):
     Calculate if based on the rsi, the stock is overbought or
     oversold
     """
-    is_overbought = rsi >= 70
-    is_oversold = rsi <= 30
+    is_overbought = rsi >= 66
+    is_oversold = rsi <= 33
     return is_overbought, is_oversold
 
 def calculate_rsi_predictions(prices, rsi):
