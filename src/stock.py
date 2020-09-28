@@ -11,7 +11,7 @@ from pandas import DataFrame, read_csv
 
 from csv_manager import get_data
 from ema import calculate_ema
-from macd import calculate_macd
+from macd import calculate_macd, calculate_macd_predictions, macd_trend
 from rsi import calculate_rsi, calculate_rsi_predictions
 from sma import calculate_sma
 
@@ -37,9 +37,10 @@ class Stock:
     """
     closes = None
     macd = None
+    macd_accuracy = None
     rsi = None
     rsi_accuracy = None
-    signal_line = None
+    signal = None
 
     def __init__(self, ticker, start, end):
         """
@@ -53,11 +54,13 @@ class Stock:
         self.closes = stock_data['Close'].tolist()
         self.closes_dt = DataFrame(self.closes)
 
-        self.macd = calculate_macd(self.closes_dt).values.flatten().tolist()
         rsi_file = 'csvs/rsi/{}.csv'.format(ticker)
         self.rsi = get_data(rsi_file, calculate_rsi, self.closes)['rsi'].tolist()
         self.rsi_accuracy = calculate_rsi_predictions(self.closes, self.rsi)[0]
-        self.signal_line = calculate_ema(self.closes_dt, 9).values.flatten().tolist()
+
+        self.macd = calculate_macd(self.closes_dt).values.flatten().tolist()
+        self.signal = calculate_ema(self.closes_dt, 9).values.flatten().tolist()
+        self.macd_accuracy = calculate_macd_predictions(self.closes, self.macd, self.signal)[0]
 
     def sma(self, period):
         """
@@ -65,9 +68,9 @@ class Stock:
         """
         return calculate_sma(self.closes, period)
 
-    def is_currently_bullish(self):
+    def macd_trend(self):
         """
         Calculates if the trend is bullish or not based on the
         macd value and the signal line
         """
-        return self.macd[-1] > self.signal_line[-1]
+        return macd_trend(self.macd[-2], self.macd[-1], self.signal[-2], self.signal[-1])

@@ -42,7 +42,7 @@ def calculate_macd_predictions(prices, macd, signal):
         prev_day = day - 1
         avg_closing = array(prices[days_observed + 1: days_observed + 4]).mean()
         days_observed += 1
-        upwards, downwards = macd(macd[prev_day], macd[day], signal[prev_day], signal[day])
+        upwards, downwards = macd_trend(macd[prev_day], macd[day], signal[prev_day], signal[day])
         if upwards:
             if prices[day] < avg_closing:
                 true_positive += 1

@@ -6,7 +6,7 @@ from threading import Lock
 from analyse_ticker import print_datas
 
 if __name__ == "__main__":
-    stocks = [line.rstrip() for line in open("stocks.txt", "r")]
+    stocks = [line.rstrip() for line in open('stocks.txt', 'r')]
     Lock()
     threads = []
 

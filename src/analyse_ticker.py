@@ -27,7 +27,7 @@ def print_data(name, data):
     Print in a certain format the data passed as an argument,
     alongside the associated name of the data
     """
-    headers = flatten(['Stock', 'Price', 'RSI', 'Accuracy', 'MACD'])
+    headers = flatten(['Stock', 'Price', 'RSI', 'Accuracy', 'MACD', 'Accuracy'])
     print(name)
     print()
     print(tabulate(data, headers=headers))
@@ -41,6 +41,14 @@ def print_datas():
     print_data('All data', all_data)
     print_data('Overbought stocks', overbought_data)
     print_data('Oversold stocks', oversold_data)
+
+def format_accuracy(accuracy_value):
+    accuracy = "{:.0%}".format(accuracy_value)
+    if accuracy_value >= 0.50:
+        accuracy += " 🔥"
+    else:
+        accuracy += " 🧊"
+    return accuracy
 
 def analyse_rsi(stock, data):
     """
@@ -56,12 +64,7 @@ def analyse_rsi(stock, data):
         current_rsi += " 🧊"
     data.append(current_rsi)
 
-    accuracy = "{:.0%}".format(stock.rsi_accuracy)
-    if stock.rsi_accuracy >= 0.50:
-        accuracy += " 🔥"
-    else:
-        accuracy += " 🧊"
-    data.append(accuracy)
+    data.append(format_accuracy(stock.rsi_accuracy))
 
     return is_overbought, is_oversold
 
@@ -71,12 +74,13 @@ def analyse_macd(stock, data):
     results in the analysis
     """
     current_macd = "{:.2f}".format(stock.macd[-1])
-    if stock.is_currently_bullish():
+    upwards, downwards = stock.macd_trend()
+    if upwards:
         current_macd += " 🔥"
-    else:
+    elif downwards:
         current_macd += " 🧊"
-
     data.append(current_macd)
+    data.append(format_accuracy(stock.macd_accuracy))
 
 def analyse_ticker(ticker):
     """
