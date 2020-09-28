@@ -22,9 +22,13 @@ oversold_data = []
 
 
 def print_data(name, data):
+    """
+    Print in a certain format the data passed as an argument,
+    alongside the associated name of the data
+    """
     headers = flatten([
         'Stock', 'Price', [str(x) + ' MA' for x in averages],
-        'RSI',  'MACD', 'chart'
+        'RSI', 'MACD', 'chart'
     ])
     print(name)
     print()
@@ -32,6 +36,10 @@ def print_data(name, data):
     print()
 
 def print_datas():
+    """
+    Print all the data in addition of those stocks that are
+    overbought and oversold
+    """
     print_data('All data', all_data)
     print_data('Overbought stocks', overbought_data)
     print_data('Oversold stocks', oversold_data)
