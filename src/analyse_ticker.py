@@ -5,15 +5,15 @@ Module with functions for the analysis and further display
 of the tickers
 """
 
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 from pandas.core.common import flatten
 from tabulate import tabulate
 
 from stock import Stock
 
 # Time frame you want to pull data from
-end = datetime.now()
-start = end - timedelta(days=365)
+end = date.today()
+start = end - timedelta(years=1)
 
 all_data = []
 averages = [20, 200]
