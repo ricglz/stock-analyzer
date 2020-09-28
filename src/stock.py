@@ -10,7 +10,6 @@ from pandas_datareader.data import get_data_yahoo
 from pandas import DataFrame, read_csv
 
 from csv_manager import get_data
-from ema import calculate_ema
 from macd import calculate_macd, calculate_macd_predictions, macd_trend
 from rsi import calculate_rsi, calculate_rsi_predictions
 from sma import calculate_sma
@@ -50,7 +49,6 @@ class Stock:
         stock_file = 'csvs/history/{}.csv'.format(ticker)
         stock_data = get_data(stock_file, get_data_yahoo, ticker, start, end)
 
-        self.ticker = ticker
         self.closes = stock_data['Close'].tolist()
         self.closes_dt = DataFrame(self.closes)
 
@@ -58,8 +56,7 @@ class Stock:
         self.rsi = get_data(rsi_file, calculate_rsi, self.closes)['rsi'].tolist()
         self.rsi_accuracy = calculate_rsi_predictions(self.closes, self.rsi)[0]
 
-        self.macd = calculate_macd(self.closes_dt).values.flatten().tolist()
-        self.signal = calculate_ema(self.closes_dt, 9).values.flatten().tolist()
+        self.macd, self.signal = calculate_macd(self.closes)
         self.macd_accuracy = calculate_macd_predictions(self.closes, self.macd, self.signal)[0]
 
     def sma(self, period):

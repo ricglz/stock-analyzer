@@ -5,19 +5,28 @@
 Module with only the function to calculate the macd
 """
 from numpy import array
+from pandas import DataFrame
 
 from ema import calculate_ema
 from utils import calculate_predictions
 
-def calculate_macd(closes, slow=26, fast=12):
+def calculate_macd(prices, slow=26, fast=12):
     """
     Compute the MACD (Moving Average Convergence/Divergence)
     using a fast and slow exponential moving avg
     """
 
-    emaslow = calculate_ema(closes, slow)
-    emafast = calculate_ema(closes, fast)
-    return emafast - emaslow
+    prices_df = DataFrame(prices)
+    fast_ewm = prices_df.ewm(span=fast).mean()
+    slow_ewm = prices_df.ewm(span=slow).mean()
+    macd = []
+    counter = 0
+    while counter < (len(fast_ewm)):
+        macd.append(fast_ewm.iloc[counter, 0] - slow_ewm.iloc[counter, 0])
+        counter += 1
+    macd_df = DataFrame(macd)
+    signal = macd_df.ewm(span=9).mean().values.tolist()
+    return macd, signal
 
 def macd_trend(prev_macd, macd, prev_signal, signal):
     """
