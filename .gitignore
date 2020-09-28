@@ -5,6 +5,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+src/csvs
+
 # C extensions
 *.so
 
