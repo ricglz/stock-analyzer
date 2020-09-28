@@ -73,7 +73,7 @@ def analyse_ticker(ticker):
     try:
         data = []
 
-        print("Pulling data for " + ticker)
+        print('Analysing data for {}'.format(ticker))
 
         stock = Stock(ticker, start, end)
 
