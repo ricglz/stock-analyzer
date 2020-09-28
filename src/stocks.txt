@@ -10,13 +10,11 @@ armk
 avgo
 ayx
 bac
-bat
 bbby
 bidu
 boss
 c
 cat
-cbat
 ccl
 chng
 clr
@@ -67,7 +65,6 @@ jef
 jnj
 jnug
 jpm
-kldo
 ko
 labu
 lyb
@@ -92,7 +89,6 @@ o
 oi
 optt
 orcl
-pacb
 pbr
 pep
 pfe
@@ -100,7 +96,6 @@ pg
 pm
 ppsi
 pton
-rad
 rcl
 reit
 rhp
