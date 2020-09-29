@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+"""
+main.py
+Module in charge of the main process
+"""
 
 from thread import TickerThread
 from threading import Lock
+
 from analyse_ticker import print_datas
 
 if __name__ == "__main__":

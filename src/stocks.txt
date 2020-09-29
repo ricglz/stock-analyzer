@@ -1,8 +1,9 @@
 aapl
-vym
 abbv
 acn
+adbe
 afl
+amzn
 apa
 apam
 apo
@@ -10,6 +11,7 @@ arcc
 armk
 avgo
 ayx
+ba
 bac
 bbby
 bidu
@@ -20,14 +22,18 @@ ccl
 chng
 clr
 cost
+crm
 cs
 csco
 cvs
 cx
 czr
 dal
+danhos13.mx
 db
+dia
 dkng
+dow
 dri
 eat
 edc
@@ -45,8 +51,16 @@ f
 fas
 faz
 feye
+fibrahd15.mx
+fibramq12.mx
+fibrapl14.mx
+fiho12.mx
+finn13.mx
+fmty14.mx
 fold
+fshop13.mx
 fsly
+funo11.mx
 ge
 gis
 glng
@@ -60,6 +74,7 @@ ibta
 idfx.l
 ilmn
 ino
+jcp
 jd
 jdst
 jef
@@ -84,6 +99,7 @@ msft
 mt
 mtg
 nclh
+nflx
 nio
 nkla
 nvax
@@ -92,6 +108,7 @@ oi
 optt
 orcl
 pbr
+penn
 pep
 pfe
 pg
@@ -99,6 +116,7 @@ pll
 pm
 ppsi
 pton
+qqq
 rcl
 reit
 rhp
@@ -114,7 +132,10 @@ sne
 spce
 spxl
 spxs
+spy
 spyd
+spyg
+spyv
 sq
 stld
 stor
@@ -125,6 +146,7 @@ tatt
 tdoc
 tecl
 tecs
+terra13.mx
 tsla
 tsm
 twm
@@ -135,7 +157,9 @@ ual
 uso
 v
 vwo
+vym
 wba
+wdc
 wll
 wmt
 wpc
