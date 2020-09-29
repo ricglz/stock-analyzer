@@ -12,6 +12,7 @@ from analyse_ticker import print_datas
 
 if __name__ == "__main__":
     stocks = [line.rstrip() for line in open('stocks.txt', 'r')]
+    print('Analysing {} stock'.format(len(stocks)))
     Lock()
     threads = []
 

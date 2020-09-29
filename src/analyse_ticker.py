@@ -21,7 +21,6 @@ averages = [20, 200]
 overbought_data = []
 oversold_data = []
 
-
 def print_data(name, data):
     """
     Print in a certain format the data passed as an argument,
@@ -30,7 +29,7 @@ def print_data(name, data):
     headers = flatten(['Stock', 'Price', 'RSI', 'Accuracy', 'MACD', 'Accuracy'])
     print(name)
     print()
-    print(tabulate(data, headers=headers))
+    print(tabulate(data, headers=headers, numalign="right"))
     print()
 
 def print_datas():
@@ -38,6 +37,12 @@ def print_datas():
     Print all the data in addition of those stocks that are
     overbought and oversold
     """
+    by_name = lambda data_row: data_row[0]
+    by_price = lambda data_row: data_row[1]
+
+    all_data.sort(key=by_name)
+    overbought_data.sort(key=by_price)
+    oversold_data.sort(key=by_price)
     print_data('All data', all_data)
     print_data('Overbought stocks', overbought_data)
     print_data('Oversold stocks', oversold_data)
@@ -92,7 +97,7 @@ def analyse_ticker(ticker):
 
         stock = Stock(ticker, start, end)
         data.append(ticker.upper())
-        data.append(stock.closes[-1])
+        data.append(float("{:.2f}".format(stock.closes[-1])))
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
 
