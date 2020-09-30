@@ -93,23 +93,22 @@ def analyse_ticker(ticker):
     Performs reader for the corresponding ticker and checks
     if it's an actual rsi value for oversold or overbought
     """
-    try:
-        data = []
+    data = []
 
+    stock = None
+    try:
         stock = Stock(ticker, start, end)
         data.append(ticker.upper())
         data.append(float("{:.2f}".format(stock.closes[-1])))
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
-
         if is_oversold:
             oversold_data.append(data)
-            return stock
-        if is_overbought:
+        elif is_overbought:
             overbought_data.append(data)
         else:
             all_data.append(data)
-        return None
-
-    except Exception as error:
-        print('Error: ', str(error), ticker)
+    except ConnectionError as error:
+        print(error, ticker)
+    except IndexError as error:
+        print(error, ticker)
