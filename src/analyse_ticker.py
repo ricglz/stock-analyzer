@@ -50,9 +50,9 @@ def print_datas():
 
 def format_accuracy(accuracy_value):
     accuracy = "{:.0%}".format(accuracy_value)
-    if accuracy_value >= 0.50:
+    if accuracy_value > 0.5:
         accuracy += " ✅"
-    else:
+    elif accuracy_value < 0.5:
         accuracy += " ❌"
     return accuracy
 
