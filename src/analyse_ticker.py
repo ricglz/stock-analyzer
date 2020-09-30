@@ -4,8 +4,9 @@
 Module with functions for the analysis and further display
 of the tickers
 """
+from datetime import date
+from requests.exceptions import ConnectionError, SSLError
 
-from datetime import date, timedelta
 from pandas.core.common import flatten
 from tabulate import tabulate
 
@@ -14,7 +15,7 @@ from rsi import calculate_bought_status
 
 # Time frame you want to pull data from
 end = date.today()
-start = end - timedelta(days=365)
+start = date(2020, 4, 1)
 
 all_data = []
 averages = [20, 200]
