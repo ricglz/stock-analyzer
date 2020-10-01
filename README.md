@@ -12,6 +12,11 @@ Then analyzes based on this close prices the technical indicator of [RSI](https:
 
 In addition to this, the code will also give you an accuracy of the indicator of this ticker. For example if the RSI is something that you should based your decision on, or not.
 
+## Resources
+
+- [mtamer/ptyhon-rsi](https://github.com/mtamer/python-rsi). I forked initially from this, but decided to make it my own as it changes a lot of things
+- [Hands-Off Investing](https://handsoffinvesting.com). I had a lot of inspirations from the articles of this blog.
+
 ## Disclaimer
 
 This repository is only for educational purposes. The owner and contributors of this repository are not responsible for how you use this code and the gains/losses you accumulate.
