@@ -1,25 +1,16 @@
-# python-rsi
+# stock-analyzer
 
-RSI (Relative Strength Index) written in Python
-
-![Python RSI Image](https://github.com/mtamer/python-rsi/blob/master/src/images/example.png)
+![Example](./images/example.png)
 
 ## About
 
-Relative Strength Index written in Python. The whole point of this application is to be able to come up with a list of as many different types of stocks (stock tickers) that you want to screen and see if it meets the Relative Strength criteria. A combination of the RSI and the 20 and 200 day Moving Average (MA) tend to be strong and popular indicators to determine the future behavior of a stock.
+A basic stock analyzer of the tickers that are available in the mexican market using [GBM Homebroker](https://plus.gbm.com/index.html) as your broker.
 
-At the end of pulling stock data, a table is shown displaying metrics of the stocks pulled along with a link to view the chart.
+This analyzer pulls historic data of the ticker using [pandas_datareader](https://pandas-datareader.readthedocs.io/en/latest/). Then stores the close price of each day in an specific csv for the ticker.
 
-![Stock Data Table](https://github.com/mtamer/python-rsi/blob/master/src/images/pulled-data-table.png)
+Then analyzes based on this close prices the technical indicator of [RSI](https://www.investopedia.com/terms/r/rsi.asp) and [MACD](https://www.investopedia.com/terms/m/macd.asp). With this estimators, the code will tell you if the stock based on only that indicator is in a bullish or bearish trend.
 
-## To Install
-
-1. Clone repo: `git clone https://github.com/mtamer/python-rsi.git`
-2. `cd src`
-3. `pip install -r requirements.txt`
-4. Look inside the `main.py` file and put all the stocks you want to monitor in there or inside of `stocks.txt`
-5. To run: `python main.py`
-6. Enjoy!
+In addition to this, the code will also give you an accuracy of the indicator of this ticker. For example if the RSI is something that you should based your decision on, or not.
 
 ## Disclaimer
 
