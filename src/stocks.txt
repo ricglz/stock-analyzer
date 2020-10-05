@@ -158,6 +158,7 @@ rcl
 reit
 rhp
 rig
+rkt
 roku
 sdc
 shv
