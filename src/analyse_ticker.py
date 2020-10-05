@@ -5,17 +5,13 @@ Module with functions for the analysis and further display
 of the tickers
 """
 from datetime import date
-from requests.exceptions import ConnectionError, SSLError
+from requests.exceptions import ConnectionError
 
 from pandas.core.common import flatten
 from tabulate import tabulate
 
 from stock import Stock
 from rsi import calculate_bought_status
-
-# Time frame you want to pull data from
-end = date.today()
-start = date(2020, 4, 1)
 
 all_data = []
 averages = [20, 200]
@@ -97,7 +93,7 @@ def analyse_ticker(ticker):
 
     stock = None
     try:
-        stock = Stock(ticker, start, end)
+        stock = Stock(ticker)
         data.append(ticker.upper())
         data.append(float("{:.2f}".format(stock.closes[-1])))
         is_overbought, is_oversold = analyse_rsi(stock, data)

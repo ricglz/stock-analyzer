@@ -11,12 +11,12 @@ from macd import calculate_macd, calculate_macd_predictions, macd_trend
 from rsi import calculate_rsi, calculate_rsi_predictions
 from sma import calculate_sma
 
-def get_stock_data(ticker, start, end):
+def get_stock_data(ticker):
     """
     Get stock data, catching an exception if there's a ConnectionError
     """
     stock_file = 'csvs/history/{}.csv'.format(ticker)
-    return get_data(stock_file, get_data_yahoo, ticker, start, end)
+    return get_data(stock_file, get_data_yahoo, ticker)
 
 class Stock:
     """
@@ -29,12 +29,12 @@ class Stock:
     rsi_accuracy = None
     signal = None
 
-    def __init__(self, ticker, start, end):
+    def __init__(self, ticker):
         """
         Different sources for pulling data can be found here:
         https://readthedocs.org/projects/pandas-datareader/downloads/pdf/latest/
         """
-        stock_data = get_stock_data(ticker, start, end)
+        stock_data = get_stock_data(ticker)
 
         self.closes = stock_data['Close'].tolist()
         self.closes_dt = DataFrame(self.closes)
