@@ -19,12 +19,12 @@ if __name__ == "__main__":
     Lock()
     threads = []
 
-    for chunk in chunks(stocks, 40):
+    for chunk in chunks(stocks, 50):
         for ticker in chunk:
             thread = TickerThread(ticker)
             thread.start()
             threads.append(thread)
-        sleep(0.5)
+        sleep(0.1)
 
     for thread in threads:
         thread.join()
