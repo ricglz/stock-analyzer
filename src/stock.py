@@ -19,16 +19,6 @@ def get_stock_data(ticker):
     return get_data(stock_file, get_data_yahoo, ticker)
 
 class Stock:
-    """
-    Class to manage the stock import values for decision making
-    """
-    closes = None
-    macd = None
-    macd_accuracy = None
-    rsi = None
-    rsi_accuracy = None
-    signal = None
-
     def __init__(self, ticker):
         """
         Different sources for pulling data can be found here:
@@ -46,11 +36,14 @@ class Stock:
         self.macd, self.signal = calculate_macd(self.closes)
         self.macd_accuracy = calculate_macd_predictions(self.closes, self.macd, self.signal)[0]
 
-    def sma(self, period):
+    def sma_is_trending(self):
         """
-        Calculates the sma of the closes based on a period
+        Check if the stock is in an upward trend basd if the fast
+        sma is higher than the lower sma
         """
-        return calculate_sma(self.closes, period)
+        sma_9 = calculate_sma(self.closes, 9)
+        sma_180 = calculate_sma(self.closes, 180)
+        return sma_9[-1] > sma_180[-1]
 
     def macd_trend(self):
         """

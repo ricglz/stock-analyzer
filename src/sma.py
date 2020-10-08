@@ -6,7 +6,7 @@ Module with only the function to calculate the sma
 """
 from numpy import convolve, repeat
 
-def calculate_sma(values, period=50):
+def calculate_sma(values, period):
     """
     Simple Moving Average. Periods are the time frame. For
     example, a period of 50 would be a 50 day moving average.

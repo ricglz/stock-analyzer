@@ -14,7 +14,6 @@ from stock import Stock
 from rsi import calculate_bought_status
 
 all_data = []
-averages = [20, 200]
 overbought_data = []
 oversold_data = []
 
@@ -23,7 +22,10 @@ def print_data(name, data):
     Print in a certain format the data passed as an argument,
     alongside the associated name of the data
     """
-    headers = flatten(['Stock', 'Price', 'RSI', 'Accuracy', 'MACD', 'Accuracy'])
+    headers = flatten([
+        'Stock', 'Price', 'RSI', 'Accuracy', 'MACD', 'Accuracy',
+        'SMA9 vs SMA180'
+    ])
     print(name)
     print()
     print(tabulate(data, headers=headers, numalign="right"))
@@ -84,6 +86,16 @@ def analyse_macd(stock, data):
     data.append(current_macd)
     data.append(format_accuracy(stock.macd_accuracy))
 
+def analyse_sma(stock, data):
+    """
+    Analyses and adds text based if the sma indicator shows an
+    upwards trend
+    """
+    if stock.sma_is_trending():
+        data.append(" 🔥")
+    else:
+        data.append(" 🧊")
+
 def analyse_ticker(ticker):
     """
     Performs reader for the corresponding ticker and checks
@@ -98,6 +110,7 @@ def analyse_ticker(ticker):
         data.append(float("{:.2f}".format(stock.closes[-1])))
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
+        analyse_sma(stock, data)
         if is_oversold:
             oversold_data.append(data)
         elif is_overbought:
