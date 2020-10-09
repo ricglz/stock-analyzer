@@ -8,10 +8,8 @@ from numpy import convolve, repeat
 
 def calculate_sma(values, period):
     """
-    Simple Moving Average. Periods are the time frame. For
-    example, a period of 50 would be a 50 day moving average.
-    Values are usually the stock closes but can be passed
-    any values
+    Simple Moving Average. Period is the timeframe to calculate
+    the average
 
     Returns numpy array
     """
