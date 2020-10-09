@@ -47,6 +47,12 @@ def print_datas():
     print_data('Oversold stocks', oversold_data)
 
 def format_accuracy(accuracy_value):
+    """
+    Formats a float accuracy value with percentage value In
+    addition if the accuracy is more than 50% then it has a
+    check. Else if is less than 50% then it should be added a
+    cross.
+    """
     accuracy = "{:.0%}".format(accuracy_value)
     if accuracy_value > 0.5:
         accuracy += " ✅"
@@ -59,8 +65,8 @@ def analyse_rsi(stock, data):
     Performs analysis over the rsi of the stock and add the
     results in the analysis
     """
-    current_rsi = "{:.2f}".format(stock.rsi[-1])
-    is_overbought, is_oversold = calculate_bought_status(float(current_rsi))
+    current_rsi = "{:.2f}".format(stock.rsi)
+    is_overbought, is_oversold = calculate_bought_status(stock.rsi)
 
     if is_overbought:
         current_rsi += " 🔥"

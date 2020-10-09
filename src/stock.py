@@ -12,13 +12,25 @@ from rsi import calculate_rsi, calculate_rsi_predictions
 from sma import calculate_sma
 
 def get_stock_data(ticker):
-    """
-    Get stock data, catching an exception if there's a ConnectionError
-    """
+    """Gets stock data"""
     stock_file = 'csvs/history/{}.csv'.format(ticker)
     return get_data(stock_file, get_data_yahoo, ticker)
 
+def get_rsi_data(ticker, closes):
+    """
+    Gets the data of the rsi being by calculating it or using
+    the storage data. And later on return the current rsi value
+    and the accuracy of the indicator for the stock
+    """
+    rsi_file = 'csvs/rsi/{}.csv'.format(ticker)
+    rsi = get_data(rsi_file, calculate_rsi, closes)['rsi'].tolist()
+    return [rsi[-1], calculate_rsi_predictions(closes, rsi)[0]]
+
 class Stock:
+    """
+    Class for representing the stock and its technical indicators
+    based on the close values of the last 5 years.
+    """
     def __init__(self, ticker):
         """
         Different sources for pulling data can be found here:
@@ -29,9 +41,7 @@ class Stock:
         self.closes = stock_data['Close'].tolist()
         self.closes_dt = DataFrame(self.closes)
 
-        rsi_file = 'csvs/rsi/{}.csv'.format(ticker)
-        self.rsi = get_data(rsi_file, calculate_rsi, self.closes)['rsi'].tolist()
-        self.rsi_accuracy = calculate_rsi_predictions(self.closes, self.rsi)[0]
+        self.rsi, self.rsi_accuracy = get_rsi_data(ticker, self.closes)
 
         self.macd, self.signal = calculate_macd(self.closes)
         self.macd_accuracy = calculate_macd_predictions(self.closes, self.macd, self.signal)[0]
