@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-main.py
-Module in charge of the main process
+without_file.py
+Module similar to the main module with the exception that the
+tickers are sent as arguments
 """
 
+from sys import argv
 from thread import run_threads
 from analyse_ticker import print_datas
 
 if __name__ == "__main__":
-    stocks = [line.rstrip() for line in open('stocks.txt', 'r')]
+    stocks = argv[1:]
     threads = run_threads(stocks)
 
     for thread in threads:
