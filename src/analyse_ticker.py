@@ -53,11 +53,9 @@ def format_accuracy(accuracy_value):
     check. Else if is less than 50% then it should be added a
     cross.
     """
-    accuracy = "{:.0%}".format(accuracy_value)
-    if accuracy_value > 0.5:
-        accuracy += " ✅"
-    elif accuracy_value < 0.5:
-        accuracy += " ❌"
+    accuracy = '{:.0%}'.format(accuracy_value)
+    accuracy += ' ✅' if accuracy_value > 0.5 else \
+                ' ❌' if accuracy_value < 0.5 else ' ❔'
     return accuracy
 
 def analyse_rsi(stock, data):
@@ -65,13 +63,11 @@ def analyse_rsi(stock, data):
     Performs analysis over the rsi of the stock and add the
     results in the analysis
     """
-    current_rsi = "{:.2f}".format(stock.rsi)
+    current_rsi = '{:.2f}'.format(stock.rsi)
     is_overbought, is_oversold = calculate_bought_status(stock.rsi)
 
-    if is_overbought:
-        current_rsi += " 🔥"
-    elif is_oversold:
-        current_rsi += " 🧊"
+    current_rsi += ' 🔥' if is_overbought else \
+                   ' 🧊' if is_oversold else ' ❔'
     data.append(current_rsi)
 
     data.append(format_accuracy(stock.rsi_accuracy))
@@ -83,13 +79,13 @@ def analyse_macd(stock, data):
     Performs analysis over the macd of the stock and add the
     results in the analysis
     """
-    current_macd = "{:.2f}".format(stock.macd)
     upwards, downwards = stock.macd_trend
     if upwards:
-        current_macd += " 🔥"
+        data.append('UP 🔥')
     elif downwards:
-        current_macd += " 🧊"
-    data.append(current_macd)
+        data.append('DW 🧊')
+    else:
+        data.append('NE')
     data.append(format_accuracy(stock.macd_accuracy))
 
 def analyse_sma(stock, data):
@@ -98,9 +94,9 @@ def analyse_sma(stock, data):
     upwards trend
     """
     if stock.sma_is_trending:
-        data.append(" 🔥")
+        data.append('UP 🔥')
     else:
-        data.append(" 🧊")
+        data.append('DW 🧊')
 
 def analyse_ticker(ticker):
     """

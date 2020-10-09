@@ -49,7 +49,6 @@ class Stock:
             self.macd_trend = [False, False]
         else:
             self.macd_trend = macd_trend(macd[-2], macd[-1], signal[-2], signal[-1])
-        self.macd = macd[-1]
 
         sma_9 = calculate_sma(self.closes, 9)
         sma_180 = calculate_sma(self.closes, 180)
