@@ -83,8 +83,8 @@ def analyse_macd(stock, data):
     Performs analysis over the macd of the stock and add the
     results in the analysis
     """
-    current_macd = "{:.2f}".format(stock.macd[-1])
-    upwards, downwards = stock.macd_trend()
+    current_macd = "{:.2f}".format(stock.macd)
+    upwards, downwards = stock.macd_trend
     if upwards:
         current_macd += " 🔥"
     elif downwards:
@@ -97,7 +97,7 @@ def analyse_sma(stock, data):
     Analyses and adds text based if the sma indicator shows an
     upwards trend
     """
-    if stock.sma_is_trending():
+    if stock.sma_is_trending:
         data.append(" 🔥")
     else:
         data.append(" 🧊")

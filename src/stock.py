@@ -43,24 +43,14 @@ class Stock:
 
         self.rsi, self.rsi_accuracy = get_rsi_data(ticker, self.closes)
 
-        self.macd, self.signal = calculate_macd(self.closes)
-        self.macd_accuracy = calculate_macd_predictions(self.closes, self.macd, self.signal)[0]
+        macd, signal = calculate_macd(self.closes)
+        self.macd_accuracy = calculate_macd_predictions(self.closes, macd, signal)[0]
+        if len(macd) < 2 or len(signal) < 2:
+            self.macd_trend = [False, False]
+        else:
+            self.macd_trend = macd_trend(macd[-2], macd[-1], signal[-2], signal[-1])
+        self.macd = macd[-1]
 
-    def sma_is_trending(self):
-        """
-        Check if the stock is in an upward trend basd if the fast
-        sma is higher than the lower sma
-        """
         sma_9 = calculate_sma(self.closes, 9)
         sma_180 = calculate_sma(self.closes, 180)
-        return sma_9[-1] > sma_180[-1]
-
-    def macd_trend(self):
-        """
-        Calculates if the trend is bullish or not based on the
-        macd value and the signal line
-        """
-        try:
-            return macd_trend(self.macd[-2], self.macd[-1], self.signal[-2], self.signal[-1])
-        except IndexError:
-            return False, False
+        self.sma_is_trending = sma_9[-1] > sma_180[-1]
