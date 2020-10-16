@@ -4,14 +4,13 @@
 Module with functions for the analysis and further display
 of the tickers
 """
-from datetime import date
 from requests.exceptions import ConnectionError
 
 from pandas.core.common import flatten
 from tabulate import tabulate
 
 from stock import Stock
-from rsi import calculate_bought_status
+from utils import bought_status
 
 all_data = []
 overbought_data = []
@@ -64,7 +63,7 @@ def analyse_rsi(stock, data):
     results in the analysis
     """
     current_rsi = '{:.2f}'.format(stock.rsi)
-    is_overbought, is_oversold = calculate_bought_status(stock.rsi)
+    is_overbought, is_oversold = bought_status(stock.rsi)
 
     current_rsi += ' 🔥' if is_overbought else \
                    ' 🧊' if is_oversold else ' ❔'

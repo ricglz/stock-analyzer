@@ -53,32 +53,3 @@ def calculate_bought_status(rsi):
     is_overbought = rsi >= 66
     is_oversold = rsi <= 33
     return is_overbought, is_oversold
-
-def calculate_rsi_predictions(prices, rsi):
-    """
-    Calculate prediction metrics of the rsi
-    """
-    days_observed = 14
-    true_positive = 0
-    false_positive = 0
-    true_negative = 0
-    false_negative = 0
-    try:
-        while days_observed < len(prices)-5:
-            change = array(prices[days_observed + 1: days_observed + 6]).mean()
-            is_overbought, is_oversold = calculate_bought_status(rsi[days_observed])
-            if is_oversold:
-                if change > prices[days_observed]:
-                    true_positive += 1
-                else:
-                    false_negative += 1
-            elif is_overbought:
-                if change <= prices[days_observed]:
-                    true_negative += 1
-                else:
-                    false_positive += 1
-            days_observed += 1
-        return calculate_predictions(true_positive, false_positive, true_negative, false_negative)
-    except IndexError as error:
-        print(error, len(rsi), len(prices))
-        return 0.5, 0.5, 0.5
