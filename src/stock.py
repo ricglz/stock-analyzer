@@ -7,8 +7,11 @@ from pandas_datareader.data import get_data_yahoo
 from stockstats import StockDataFrame
 
 from csv_manager import get_data
-from utils import macd_trend
+from utils import macd_trend, sma_trend
 from predictions import macd_predictions, rsi_predictions
+
+StockDataFrame.MACD_EMA_SHORT = 8
+StockDataFrame.MACD_EMA_LONG = 17
 
 def get_stock_data(ticker):
     """Gets stock data"""
@@ -31,9 +34,13 @@ class Stock:
 
         rsi_list = stock_data['rsi_6'].tolist()
         self.rsi = rsi_list[-1]
-        self.rsi_accuracy = rsi_predictions(closes_list)
+        self.rsi_accuracy = rsi_predictions(closes_list, rsi_list)[0]
 
         macd = stock_data['macd'].tolist()
         signal = stock_data['macds'].tolist()
-        self.macd_accuracy = macd_predictions(closes_list, macd, signal)
+        self.macd_accuracy = macd_predictions(closes_list, macd, signal)[0]
         self.macd_trend = macd_trend(macd, signal)
+
+        sma_9 = stock_data['close_9_sma'].tolist()
+        sma_180 = stock_data['close_180_sma'].tolist()
+        self.sma_trend = sma_trend(sma_9[-1], sma_180[-1])

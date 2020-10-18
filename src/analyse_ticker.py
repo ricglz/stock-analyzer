@@ -73,18 +73,21 @@ def analyse_rsi(stock, data):
 
     return is_overbought, is_oversold
 
+def format_trend(trend):
+    """
+    Formats trend to instead add special text to notice it easier
+    @arg trend. A tuple with the format of (upwards, downwards)
+    @return text. Text with the formatted text
+    """
+    upwards, downwards = trend
+    return 'UP 🔥' if upwards else 'DW 🧊' if downwards else 'NE ❔'
+
 def analyse_macd(stock, data):
     """
     Performs analysis over the macd of the stock and add the
     results in the analysis
     """
-    upwards, downwards = stock.macd_trend
-    if upwards:
-        data.append('UP 🔥')
-    elif downwards:
-        data.append('DW 🧊')
-    else:
-        data.append('NE')
+    data.append(format_trend(stock.macd_trend))
     data.append(format_accuracy(stock.macd_accuracy))
 
 def analyse_sma(stock, data):
@@ -92,10 +95,7 @@ def analyse_sma(stock, data):
     Analyses and adds text based if the sma indicator shows an
     upwards trend
     """
-    if stock.sma_is_trending:
-        data.append('UP 🔥')
-    else:
-        data.append('DW 🧊')
+    data.append(format_trend(stock.sma_trend))
 
 def analyse_ticker(ticker):
     """
@@ -108,7 +108,7 @@ def analyse_ticker(ticker):
     try:
         stock = Stock(ticker)
         data.append(ticker.upper())
-        data.append(float("{:.2f}".format(stock.closes[-1])))
+        data.append(float("{:.2f}".format(stock.closes)))
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
         analyse_sma(stock, data)

@@ -25,6 +25,11 @@ def macd_trend(macd, signal):
     is_downward = signal[-2] < macd[-2] and signal[-1] >= macd[-1]
     return is_upwards, is_downward
 
+def sma_trend(fast_sma, slow_sma):
+    is_bullish = fast_sma >= slow_sma * 1.01
+    is_bearish = fast_sma <= slow_sma * 0.99
+    return is_bullish, is_bearish
+
 def divide(numerator, denominator):
     """
     Divide function to avoid errors by dividing over zero
