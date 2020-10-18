@@ -17,6 +17,7 @@ mfgp
 mo
 msft
 rig
+snap
 sne
 t
 terra13.mx

@@ -4,27 +4,19 @@
 Module in charge of managing the stock and its analystic values
 """
 from pandas_datareader.data import get_data_yahoo
-from pandas import DataFrame
+from stockstats import StockDataFrame
 
 from csv_manager import get_data
-from macd import calculate_macd, calculate_macd_predictions, macd_trend
-from rsi import calculate_rsi, calculate_rsi_predictions
-from sma import calculate_sma
+from utils import macd_trend, sma_trend
+from predictions import macd_predictions, rsi_predictions
+
+StockDataFrame.MACD_EMA_SHORT = 8
+StockDataFrame.MACD_EMA_LONG = 17
 
 def get_stock_data(ticker):
     """Gets stock data"""
     stock_file = 'csvs/history/{}.csv'.format(ticker)
-    return get_data(stock_file, get_data_yahoo, ticker)
-
-def get_rsi_data(ticker, closes):
-    """
-    Gets the data of the rsi being by calculating it or using
-    the storage data. And later on return the current rsi value
-    and the accuracy of the indicator for the stock
-    """
-    rsi_file = 'csvs/rsi/{}.csv'.format(ticker)
-    rsi = get_data(rsi_file, calculate_rsi, closes)['rsi'].tolist()
-    return [rsi[-1], calculate_rsi_predictions(closes, rsi)[0]]
+    return StockDataFrame.retype(get_data(stock_file, get_data_yahoo, ticker))
 
 class Stock:
     """
@@ -37,19 +29,18 @@ class Stock:
         https://readthedocs.org/projects/pandas-datareader/downloads/pdf/latest/
         """
         stock_data = get_stock_data(ticker)
+        closes_list = stock_data.close.tolist()
+        self.closes = closes_list[-1]
 
-        self.closes = stock_data['Close'].tolist()
-        self.closes_dt = DataFrame(self.closes)
+        rsi_list = stock_data['rsi_6'].tolist()
+        self.rsi = rsi_list[-1]
+        self.rsi_accuracy = rsi_predictions(closes_list, rsi_list)[0]
 
-        self.rsi, self.rsi_accuracy = get_rsi_data(ticker, self.closes)
+        macd = stock_data['macd'].tolist()
+        signal = stock_data['macds'].tolist()
+        self.macd_accuracy = macd_predictions(closes_list, macd, signal)[0]
+        self.macd_trend = macd_trend(macd, signal)
 
-        macd, signal = calculate_macd(self.closes)
-        self.macd_accuracy = calculate_macd_predictions(self.closes, macd, signal)[0]
-        if len(macd) < 2 or len(signal) < 2:
-            self.macd_trend = [False, False]
-        else:
-            self.macd_trend = macd_trend(macd[-2], macd[-1], signal[-2], signal[-1])
-
-        sma_9 = calculate_sma(self.closes, 9)
-        sma_180 = calculate_sma(self.closes, 180)
-        self.sma_is_trending = sma_9[-1] > sma_180[-1]
+        sma_9 = stock_data['close_9_sma'].tolist()
+        sma_180 = stock_data['close_180_sma'].tolist()
+        self.sma_trend = sma_trend(sma_9[-1], sma_180[-1])
