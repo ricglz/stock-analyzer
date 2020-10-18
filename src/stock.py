@@ -15,7 +15,7 @@ StockDataFrame.MACD_EMA_LONG = 17
 
 def get_stock_data(ticker):
     """Gets stock data"""
-    stock_file = 'csvs/history/{}.csv'.format(ticker)
+    stock_file = f'csvs/history/{ticker}.csv'
     return StockDataFrame.retype(get_data(stock_file, get_data_yahoo, ticker))
 
 class Stock:

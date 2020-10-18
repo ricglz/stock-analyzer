@@ -30,7 +30,7 @@ def run_threads(stocks):
     creating chunks of elements and sleeping after each chunk
     was processed
     """
-    print('Analysing {} stock'.format(len(stocks)))
+    print(f'Analysing {len(stocks)} stock')
 
     Lock()
     threads = []

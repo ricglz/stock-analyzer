@@ -52,7 +52,7 @@ def format_accuracy(accuracy_value):
     check. Else if is less than 50% then it should be added a
     cross.
     """
-    accuracy = '{:.0%}'.format(accuracy_value)
+    accuracy = f'{accuracy_value:.0%}'
     accuracy += ' ✅' if accuracy_value > 0.5 else \
                 ' ❌' if accuracy_value < 0.5 else ' ❔'
     return accuracy
@@ -62,7 +62,7 @@ def analyse_rsi(stock, data):
     Performs analysis over the rsi of the stock and add the
     results in the analysis
     """
-    current_rsi = '{:.2f}'.format(stock.rsi)
+    current_rsi = f'{stock.rsi:.2f}'
     is_overbought, is_oversold = bought_status(stock.rsi)
 
     current_rsi += ' 🔥' if is_overbought else \
@@ -108,7 +108,7 @@ def analyse_ticker(ticker):
     try:
         stock = Stock(ticker)
         data.append(ticker.upper())
-        data.append(float("{:.2f}".format(stock.closes)))
+        data.append(float(f'{stock.closes:.2f}'))
         is_overbought, is_oversold = analyse_rsi(stock, data)
         analyse_macd(stock, data)
         analyse_sma(stock, data)
