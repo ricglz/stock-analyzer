@@ -13,10 +13,15 @@ from predictions import macd_predictions, rsi_predictions
 StockDataFrame.MACD_EMA_SHORT = 8
 StockDataFrame.MACD_EMA_LONG = 17
 
+def organized_data_yahoo(ticker):
+    """Organizes data of the yahoo information"""
+    columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
+    return get_data_yahoo(ticker).reindex(columns=columns)
+
 def get_stock_data(ticker):
     """Gets stock data"""
     stock_file = f'csvs/history/{ticker}.csv'
-    return StockDataFrame.retype(get_data(stock_file, get_data_yahoo, ticker))
+    return StockDataFrame.retype(get_data(stock_file, organized_data_yahoo, ticker))
 
 class Stock:
     """
