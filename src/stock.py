@@ -3,6 +3,7 @@
 """
 Module in charge of managing the stock and its analystic values
 """
+from os import makedirs, path
 from pandas_datareader.data import get_data_yahoo
 from stockstats import StockDataFrame
 
@@ -10,17 +11,24 @@ from csv_manager import get_data
 from utils import macd_trend, sma_trend
 from predictions import macd_predictions, rsi_predictions
 
-StockDataFrame.MACD_EMA_SHORT = 8
-StockDataFrame.MACD_EMA_LONG = 17
+StockDataFrame.MACD_EMA_SHORT = 12
+StockDataFrame.MACD_EMA_LONG = 26
+
+base_dir = path.join('csvs', 'history')
 
 def organized_data_yahoo(ticker):
     """Organizes data of the yahoo information"""
     columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']
-    return get_data_yahoo(ticker).reindex(columns=columns)
+    try:
+        return get_data_yahoo(ticker).reindex(columns=columns)
+    except Exception as error:
+        print(error, ticker)
+        return None
 
 def get_stock_data(ticker):
     """Gets stock data"""
-    stock_file = f'csvs/history/{ticker}.csv'
+    makedirs(base_dir, exist_ok=True)
+    stock_file = path.join(base_dir, f'{ticker}.csv')
     return StockDataFrame.retype(get_data(stock_file, organized_data_yahoo, ticker))
 
 class Stock:
@@ -37,7 +45,7 @@ class Stock:
         closes_list = stock_data.close.tolist()
         self.closes = closes_list[-1]
 
-        rsi_list = stock_data['rsi_6'].tolist()
+        rsi_list = stock_data['rsi_20'].tolist()
         self.rsi = rsi_list[-1]
         self.rsi_accuracy = rsi_predictions(closes_list, rsi_list)[0]
 
